@@ -1,0 +1,13 @@
+[
+  {
+    "name": "default",
+    "type": "mariadb",
+    "host": "kurly.cwlbmv6oqerc.ap-northeast-2.rds.amazonaws.com",
+    "port": 3306,
+    "username": "admin",
+    "password": "adminadmin",
+    "database": "",
+    "synchronize": false,
+    "entities": ["entities/*.js"]
+  }
+]
