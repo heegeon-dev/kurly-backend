@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { CreatePostScrap } from './dto/create-postScrap.dto';
 import { PostService } from './post.service';
 
 @Controller('post')
@@ -23,5 +24,15 @@ export class PostController {
   @Get(':postId')
   findOne(@Param('postId') postId: string) {
     return this.postService.findOne(+postId);
+  }
+
+  @Post('/scrap')
+  scrapProduct(@Body() CreatePostScrap: CreatePostScrap){
+    return this.postService.scrapPost(CreatePostScrap);
+  }
+
+  @Delete('/scrap/:scrapId')
+  deleteProduct(@Param('scrapId') scrapId: number ){
+    return this.postService.deletePost(scrapId);
   }
 }

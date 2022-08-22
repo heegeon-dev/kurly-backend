@@ -3,12 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from '../models/entities/Post';
 import { Repository } from 'typeorm';
 import { Pagination, PaginationOptions } from "../utils/paginate";
+import { CreatePostScrap } from './dto/create-postScrap.dto';
+import { PostScrap } from 'src/models/entities/PostScrap';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
     private postRepository: Repository<Post>,
+    @InjectRepository(PostScrap)
+    private postScrapRepository: Repository<PostScrap>,
   ) {}
   async findAll(
     options: PaginationOptions,
@@ -45,5 +49,12 @@ export class PostService {
       .leftJoinAndSelect("postRepository.postScraps","postScraps")
       .where("postRepository.postId=:postId",{ postId })
       .getOne();
+  }
+
+  scrapPost(createPostScrap: CreatePostScrap){
+    return this.postScrapRepository.create(createPostScrap);
+  }
+  deletePost(scrapId: number){
+    return this.postScrapRepository.delete(scrapId);
   }
 }
