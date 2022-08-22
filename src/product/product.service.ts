@@ -3,12 +3,20 @@ import { Pagination, PaginationOptions } from "../utils/paginate";
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../models/entities/Product';
+import { Cart } from '../models/entities/Cart';
+import { CreateCart } from './dto/create-cart.dto';
+import { CreateProductScrap } from './dto/create-productScrap.dto';
+import { ProductScrap } from '../models/entities/ProductScrap';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @InjectRepository(Cart)
+    private cartRepository: Repository<Cart>,
+    @InjectRepository(ProductScrap)
+    private productScrapRepository: Repository<ProductScrap>,
   ) {}
 
   async findAll(
@@ -33,9 +41,29 @@ export class ProductService {
     });
   }
 
-  async findOne(productId: number) {
-    let result = await this.productRepository.findOneById(productId);
-    console.log(result)
-    return result;
+  findOne(productId: number) {
+    return this.productRepository.findOneById(productId);
   }
+
+  getCart(userId: number){
+    return this.cartRepository.createQueryBuilder("cart")
+      .where("cart.userId=:userId",{ userId })
+      .getOne();
+  }
+
+  addProductInCart(createCart : CreateCart){
+    return this.cartRepository.create(createCart);
+  }
+
+  deleteProductInCart(cartId : number){
+    return this.cartRepository.delete(cartId);
+  }
+
+  scrapProduct(createProductScrap: CreateProductScrap){
+    return this.productScrapRepository.create(createProductScrap);
+  }
+  deleteProduct(scrapId: number){
+    return this.productScrapRepository.delete(scrapId);
+  }
+  
 }

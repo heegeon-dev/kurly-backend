@@ -2,8 +2,8 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Product } from "./Product";
 import { UserInfo } from "./UserInfo";
 
-@Index("FK_user_info_TO_cart_1", ["userId"], {})
 @Index("FK_product_TO_cart_1", ["productId"], {})
+@Index("FK_user_info_TO_cart_1", ["userId"], {})
 @Entity("cart", { schema: "kurly" })
 export class Cart {
   @Column("int", { primary: true, name: "cart_id" })

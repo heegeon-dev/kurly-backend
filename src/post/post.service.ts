@@ -13,14 +13,15 @@ export class PostService {
   async findAll(
     options: PaginationOptions,
     keyword: string,
-    userId
+    userId: number
   ) {
     const { take, page } = options;
 
     let qb = this.postRepository
-    .createQueryBuilder("postRepository")
-    .skip(take * page)
-    .take(take);
+      .createQueryBuilder("postRepository")
+      .select(["postRepository.postId","postRepository.title","postRepository.subTitle","postRepository.thumbnail"])
+      .skip(take * page)
+      .take(take);
 
     if(userId){
       qb.leftJoinAndSelect("postRepository.postScraps","postScraps")
@@ -29,7 +30,6 @@ export class PostService {
 
     if(keyword){
       qb.andWhere("postRepository.title LIKE :keyword",{ keyword: `%${keyword}%`})
-        .andWhere("postRepository.subtitle LIKE :keyword",{ keyword: `%${keyword}%`})
     }
     const [results, total] = await qb.getManyAndCount();
 

@@ -13,6 +13,12 @@ export class Tag {
   @Column("int", { primary: true, name: "tag_id" })
   tagId: number;
 
+  @Column("float", { name: "x", nullable: true, precision: 12 })
+  x: number | null;
+
+  @Column("float", { name: "y", nullable: true, precision: 12 })
+  y: number | null;
+
   @ManyToOne(() => Post, (post) => post.tags, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
 import { Product } from "./Product";
 import { Tag } from "./Tag";
 import { PostScrap } from "./PostScrap";
@@ -19,6 +19,12 @@ export class Post {
 
   @Column("varchar", { name: "category", nullable: true, length: 200 })
   category: string | null;
+
+  @Column("varchar", { name: "thumbnail", nullable: true, length: 200 })
+  thumbnail: string | null;
+
+  @ManyToMany(() => Product, (product) => product.posts)
+  products: Product[];
 
   @OneToMany(() => Tag, (tag) => tag.post)
   tags: Tag[];

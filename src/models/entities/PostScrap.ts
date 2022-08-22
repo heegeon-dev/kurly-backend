@@ -2,8 +2,8 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Post } from "./Post";
 import { UserInfo } from "./UserInfo";
 
-@Index("FK_user_info_TO_post_scrap_1", ["userId"], {})
 @Index("FK_post_TO_post_scrap_1", ["postId"], {})
+@Index("FK_user_info_TO_post_scrap_1", ["userId"], {})
 @Entity("post_scrap", { schema: "kurly" })
 export class PostScrap {
   @Column("int", { primary: true, name: "post_scrap_id" })
