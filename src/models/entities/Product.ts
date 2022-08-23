@@ -26,6 +26,9 @@ export class Product {
   @Column("varchar", { name: "thumbnail", nullable: true, length: 200 })
   thumbnail: string | null;
 
+  @Column("varchar", { name: "image", nullable: true, length: 2000 })
+  image: string | null;
+
   @ManyToMany(() => Post, (post) => post.products)
   @JoinTable({
     name: "pp_rel",

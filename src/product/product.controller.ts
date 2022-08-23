@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
 import { CreateCart } from './dto/create-cart.dto';
 import { CreateProductScrap } from './dto/create-productScrap.dto';
 import { ProductService } from './product.service';
@@ -27,13 +27,13 @@ export class ProductController {
   }
 
   @Post('/cart')
-  createProductInCart(@Body() createCart: CreateCart){
+  addProductInCart(@Body() createCart: CreateCart){
     return this.productService.addProductInCart(createCart);
   }
 
-  @Delete('/cart/:cartId')
-  deleteProductInCart(@Param('cartId') cartId: number){
-    return this.productService.deleteProductInCart(cartId);
+  @Delete('/cart')
+  deleteProductInCart(@Query('userId') userId: number){
+    return this.productService.deleteProductInCart(userId);
   }
 
   @Get('/:productId')
@@ -43,12 +43,16 @@ export class ProductController {
 
   @Post('/scrap')
   scrapProduct(@Body() createPostScrap: CreateProductScrap){
-    console.log(createPostScrap);
     return this.productService.scrapProduct(createPostScrap);
   }
 
   @Delete('/scrap/:scrapId')
   deleteProduct(@Param('scrapId') scrapId: number ){
     return this.productService.deleteProductScrap(scrapId);
+  }
+
+  @Post('/cart/bulk')
+  bulkAddProductInCart(@Body('productMap') productMap: object, @Body('userId') userId: number){
+    return this.productService.bulkAddProductInCart(Object.keys(productMap).map( productId => new CreateCart(userId,+productId,+productMap[productId])));
   }
 }

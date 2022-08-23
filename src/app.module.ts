@@ -15,7 +15,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: 'adminadmin',
       database: 'kurly',
       entities: [__dirname + '/**/entities/*.{ts,js}'],
-      synchronize: true,
+      synchronize: false,
+      logging: true
     }),
     PostModule,
     ProductModule
