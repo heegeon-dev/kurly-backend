@@ -1,9 +1,11 @@
 service: kurly-backend
 
 plugins:
-  - 'serverless-plugin-typescript'
+  - serverless-plugin-typescript
   - serverless-plugin-optimize
   - serverless-offline
+  - serverless-plugin-warmup
+
 provider:
   name: aws
   runtime: nodejs16.x
@@ -15,11 +17,19 @@ package:
 functions:
   main:
     handler: src/lambda.handler
+    warmup: true
     events:
       - http:
           method: any
           path: /{proxy+}
           cors: true
+
+iamRoleStatements:
+  - Effect: 'Allow'
+    Action:
+      - 'lambda:InvokeFunction'
+    Resource: "*"
+    
 # resources:
 #   Resources:
 #     GatewayResponseDefault4XX:
