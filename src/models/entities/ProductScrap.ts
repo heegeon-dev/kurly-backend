@@ -1,4 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { UserInfo } from "./UserInfo";
 import { Product } from "./Product";
 
@@ -12,7 +19,7 @@ export class ProductScrap {
   @Column("int", { name: "product_id" })
   productId: number;
 
-  @Column("int", { primary: true, name: "ps_id" })
+  @PrimaryGeneratedColumn({ type: "int", name: "ps_id" })
   psId: number;
 
   @ManyToOne(() => UserInfo, (userInfo) => userInfo.productScraps, {
