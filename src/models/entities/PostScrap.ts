@@ -1,4 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Post } from "./Post";
 import { UserInfo } from "./UserInfo";
 
@@ -6,14 +13,14 @@ import { UserInfo } from "./UserInfo";
 @Index("FK_user_info_TO_post_scrap_1", ["userId"], {})
 @Entity("post_scrap", { schema: "kurly" })
 export class PostScrap {
-  @Column("int", { primary: true, name: "post_scrap_id" })
-  postScrapId: number;
-
   @Column("int", { name: "user_id" })
   userId: number;
 
   @Column("int", { name: "post_id" })
   postId: number;
+
+  @PrimaryGeneratedColumn({ type: "int", name: "post_scrap_id" })
+  postScrapId: number;
 
   @ManyToOne(() => Post, (post) => post.postScraps, {
     onDelete: "RESTRICT",

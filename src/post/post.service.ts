@@ -4,7 +4,7 @@ import { Post } from '../models/entities/Post';
 import { Repository } from 'typeorm';
 import { Pagination, PaginationOptions } from "../utils/paginate";
 import { CreatePostScrap } from './dto/create-postScrap.dto';
-import { PostScrap } from 'src/models/entities/PostScrap';
+import { PostScrap } from '../models/entities/PostScrap';
 
 @Injectable()
 export class PostService {
@@ -22,37 +22,49 @@ export class PostService {
     const { take, page } = options;
 
     let qb = this.postRepository
-      .createQueryBuilder("postRepository")
-      .select(["postRepository.postId","postRepository.title","postRepository.subTitle","postRepository.thumbnail"])
+      .createQueryBuilder("post")
+      .select(["post.postId","post.title","post.subTitle","post.thumbnail"])
       .skip(take * page)
       .take(take);
 
     if(userId){
-      qb.leftJoinAndSelect("postRepository.postScraps","postScraps")
-        .andWhere("postScraps.userId=:userId",{ userId })
+      qb.leftJoinAndSelect((qb) => 
+        qb.select("postScrap.postScrapId")
+          .from(PostScrap, 'postScrap')
+          .where('postScrap.userId=:userId', { userId })
+      , 'sub', "sub.postScrap_post_scrap_id = post.postId");
     }
 
     if(keyword){
-      qb.andWhere("postRepository.title LIKE :keyword",{ keyword: `%${keyword}%`})
+      qb.andWhere("post.title LIKE :keyword",{ keyword: `%${keyword}%`})
     }
-    const [results, total] = await qb.getManyAndCount();
-
+    const total = await qb.getCount();
+    const results = await qb.getRawMany();
     return new Pagination<Post>({
       results,
       total,
     });
   }
 
-  findOne(postId: number) {
-    return this.postRepository.createQueryBuilder("postRepository")
-      .leftJoinAndSelect("postRepository.tags","tags")
-      .leftJoinAndSelect("postRepository.postScraps","postScraps")
-      .where("postRepository.postId=:postId",{ postId })
+  async findOne(postId: number, userId: number) {
+    const post = await this.postRepository
+      .createQueryBuilder("post")
+      .leftJoinAndSelect("post.tags","tag")
+      .where("post.postId=:postId",{ postId })
       .getOne();
+    const isScrap = await this.postScrapRepository
+      .findOneBy({postId: post.postId}) ? true : false;
+    return { post, isScrap };
   }
 
-  scrapPost(createPostScrap: CreatePostScrap){
-    return this.postScrapRepository.create(createPostScrap);
+  async scrapPost(createPostScrap: CreatePostScrap){
+    const scrap = await this.postScrapRepository.findOneBy(createPostScrap);
+    console.log(scrap)
+    if( scrap ){
+      return scrap;
+    }else{
+      return this.postScrapRepository.insert(createPostScrap); 
+    }
   }
   deletePost(scrapId: number){
     return this.postScrapRepository.delete(scrapId);

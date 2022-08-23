@@ -9,7 +9,7 @@ export class Cart {
   @Column("int", { primary: true, name: "cart_id" })
   cartId: number;
 
-  @Column("int", { primary: true, name: "user_id" })
+  @Column("int", { name: "user_id" })
   userId: number;
 
   @Column("int", { name: "product_id" })

@@ -22,8 +22,8 @@ export class PostController {
   }
 
   @Get(':postId')
-  findOne(@Param('postId') postId: string) {
-    return this.postService.findOne(+postId);
+  async findOne(@Param('postId') postId: string, @Query('userId') userId: number) {
+    return this.postService.findOne(+postId, +userId);
   }
 
   @Post('/scrap')

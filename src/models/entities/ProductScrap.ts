@@ -6,14 +6,14 @@ import { Product } from "./Product";
 @Index("FK_user_info_TO_product_scrap_1", ["userId"], {})
 @Entity("product_scrap", { schema: "kurly" })
 export class ProductScrap {
-  @Column("int", { primary: true, name: "ps_id" })
-  psId: number;
-
   @Column("int", { name: "user_id" })
   userId: number;
 
   @Column("int", { name: "product_id" })
   productId: number;
+
+  @Column("int", { primary: true, name: "ps_id" })
+  psId: number;
 
   @ManyToOne(() => UserInfo, (userInfo) => userInfo.productScraps, {
     onDelete: "RESTRICT",

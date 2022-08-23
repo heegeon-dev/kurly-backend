@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ProductScrap } from 'src/models/entities/ProductScrap';
 import { CreateCart } from './dto/create-cart.dto';
 import { CreateProductScrap } from './dto/create-productScrap.dto';
 import { ProductService } from './product.service';
@@ -13,10 +12,12 @@ export class ProductController {
     @Query("take") take: number,
     @Query("page") page: number,
     @Query("keyword") keyword: string,
+    @Query("userId") userId: number
   ) {
     return this.productService.findAll(
       { take: take ? take : 20, page: page ? page : 0 },
       keyword,
+      userId
     );
   }
 
@@ -41,12 +42,13 @@ export class ProductController {
   }
 
   @Post('/scrap')
-  scrapProduct(@Body() CreatePostScrap: CreateProductScrap){
-    return this.productService.scrapProduct(CreatePostScrap);
+  scrapProduct(@Body() createPostScrap: CreateProductScrap){
+    console.log(createPostScrap);
+    return this.productService.scrapProduct(createPostScrap);
   }
 
   @Delete('/scrap/:scrapId')
   deleteProduct(@Param('scrapId') scrapId: number ){
-    return this.productService.deleteProduct(scrapId);
+    return this.productService.deleteProductScrap(scrapId);
   }
 }
