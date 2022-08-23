@@ -49,7 +49,9 @@ export class PostService {
   async findOne(postId: number, userId: number) {
     const post = await this.postRepository
       .createQueryBuilder("post")
-      .leftJoinAndSelect("post.tags","tag")
+      .leftJoinAndSelect("post.tags","tags")
+      .leftJoin("tags.product","product")
+      .addSelect(["product.category"])
       .where("post.postId=:postId",{ postId })
       .getOne();
     const isScrap = await this.postScrapRepository

@@ -1,5 +1,4 @@
-import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
-import { Product } from "./Product";
+import { Column, Entity, OneToMany } from "typeorm";
 import { Tag } from "./Tag";
 import { PostScrap } from "./PostScrap";
 
@@ -25,9 +24,6 @@ export class Post {
 
   @Column("varchar", { name: "image", nullable: true, length: 2000 })
   image: string | null;
-
-  @ManyToMany(() => Product, (product) => product.posts)
-  products: Product[];
 
   @OneToMany(() => Tag, (tag) => tag.post)
   tags: Tag[];

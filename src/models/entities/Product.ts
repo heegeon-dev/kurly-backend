@@ -1,6 +1,6 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
-import { Post } from "./Post";
+import { Column, Entity, OneToMany } from "typeorm";
 import { Cart } from "./Cart";
+import { Tag } from "./Tag";
 import { ProductScrap } from "./ProductScrap";
 
 @Entity("product", { schema: "kurly" })
@@ -29,17 +29,14 @@ export class Product {
   @Column("varchar", { name: "image", nullable: true, length: 2000 })
   image: string | null;
 
-  @ManyToMany(() => Post, (post) => post.products)
-  @JoinTable({
-    name: "pp_rel",
-    joinColumns: [{ name: "product_id", referencedColumnName: "productId" }],
-    inverseJoinColumns: [{ name: "post_id", referencedColumnName: "postId" }],
-    schema: "kurly",
-  })
-  posts: Post[];
+  @Column("varchar", { name: "category", nullable: true, length: 50 })
+  category: string | null;
 
   @OneToMany(() => Cart, (cart) => cart.product)
   carts: Cart[];
+
+  @OneToMany(() => Tag, (tag) => tag.product)
+  tags: Tag[];
 
   @OneToMany(() => ProductScrap, (productScrap) => productScrap.product)
   productScraps: ProductScrap[];
