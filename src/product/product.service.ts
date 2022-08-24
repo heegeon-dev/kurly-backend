@@ -24,7 +24,7 @@ export class ProductService {
 
     let qb = this.productRepository
       .createQueryBuilder('product')
-      .select(["product.productId", "product.title", "product.kurlyOnly", "product.subTitle", "product.thumbnail"])
+      .select(["product.productId", "product.title", "product.kurlyOnly", "product.subTitle", "product.thumbnail", "product.price","product.discount","product.delivery"])
       .skip(take * page)
       .take(take);
 

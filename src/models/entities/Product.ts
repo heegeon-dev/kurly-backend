@@ -32,6 +32,12 @@ export class Product {
   @Column("varchar", { name: "category", nullable: true, length: 50 })
   category: string | null;
 
+  @Column("varchar", { name: "delivery", nullable: true, length: 63 })
+  delivery: string | null;
+
+  @Column("float", { name: "discount", nullable: true, precision: 12 })
+  discount: number | null;
+
   @OneToMany(() => Cart, (cart) => cart.product)
   carts: Cart[];
 
